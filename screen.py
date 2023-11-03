@@ -656,7 +656,7 @@ class METARScreen:
         add_i = "I" if self.inverted else ""
         therm_icon = f"Therm{therm_level}{add_i}.png"
         point = self.layout["main"]["temp-icon"]
-        self.win.blit(pygame.image.load(str(ICON_PATH / therm_icon)), point)
+        #self.win.blit(pygame.image.load(str(ICON_PATH / therm_icon)), point)
 
     def __draw_temp_dew_humidity(self, data: avwx.structs.MetarData):
         """
