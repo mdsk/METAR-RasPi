@@ -406,7 +406,7 @@ class METARScreen:
         """
         Returns a new Screen from a saved session
         """
-        station = session.get("station", "KJFK")
+        station = session.get("station", "EPWR")
         inverted = session.get("inverted", True)
         return cls(station, size, inverted)
 
