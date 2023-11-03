@@ -374,7 +374,7 @@ class METARScreen:
         try:
             self.metar = avwx.Metar(station)
         except avwx.exceptions.BadStation:
-            self.metar = avwx.Metar("KJFK")
+            self.metar = avwx.Metar("EPWR")
         self.ident = common.station_to_ident(station)
         self.old_ident = copy(self.ident)
         self.width, self.height = size
