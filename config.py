@@ -37,7 +37,7 @@ include_remarks = False
 # ------- Screen Settings ------ #
 
 # Size of the screen. Loads the layout from "./screen_settings"
-layout = "320x240"
+layout = "480x320"
 
 LOC = Path(path.abspath(path.dirname(__file__)))
 layout = LOC / "screen_settings" / f"{layout}.json"
@@ -50,7 +50,7 @@ fullscreen = True
 hide_mouse = True
 
 # Clock displays UTC or local time
-clock_utc = True
+clock_utc = False
 
 # Clock strftime format string
 clock_format = r"%H:%M"    # 24-hour
