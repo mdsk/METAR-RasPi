@@ -105,17 +105,11 @@ On the main display, pressing the RMK, WX, WX/RMK displays more METAR informatio
 
 ## Startup
 
-If you want the METAR screen to run on boot, we can use autostart by creating this file:
+If you want the METAR screen to run on boot, we can use autostart file at /etc/xdg/lxsession/LXDE-pi.
+Just put following line there:
 
-`/home/pi/.config/autostart/metar.desktop`
-
-```text
-[Desktop]
-Type=Application
-Name=Metar
-Exec=/usr/bin/python3 /home/pi/METAR-RasPi/screen.py
+```bash
+@/usr/bin/python3 /home/pi/METAR-RasPi/screen.py
 ```
-
-Make sure the Exec line uses your version of Python and points to your project folder.
 
 Replace `screen.py` with `plate.py` to run the METAR plate.
