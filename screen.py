@@ -825,7 +825,7 @@ class METARScreen:
         # Visibility
         vis = data.visibility
         if vis:
-            vis_text += f"{vis.value}{units.visibility}" if vis<9999 else ">10km"
+            vis_text += f"{vis.value}{units.visibility}" if vis.value<9999 else ">10km"
         else:
             vis_text += "--"
         point = self.layout["main"]["vis"]
