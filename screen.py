@@ -824,7 +824,10 @@ class METARScreen:
         self.win.blit(FONT_S3.render(altm_text, 1, self.c.BLACK), point)
         # Visibility
         vis = data.visibility
-        vis_text += f"{vis.value}{units.visibility}" if vis else "--"
+        if vis:
+            vis_text += f"{vis.value}{units.visibility}" if vis<9999 else ">10km"
+        else:
+            vis_text += "--"
         point = self.layout["main"]["vis"]
         self.win.blit(FONT_S3.render(vis_text, 1, self.c.BLACK), point)
         # Cloud Layers
