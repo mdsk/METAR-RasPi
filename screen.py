@@ -658,6 +658,13 @@ class METARScreen:
         point = self.layout["main"]["temp-icon"]
         #self.win.blit(pygame.image.load(str(ICON_PATH / therm_icon)), point)
 
+    def __feeltemp(t, rh, w):
+        #w = w/3.6
+        #w= w/1.94384
+        e = (rh/100)*6.105*math.pow(2.71828, ((17.27*t)/(237.7+t)))
+        at = 0.33*(rh/100)*6.105*math.pow(2.71828, ((17.27*t)/(237.7+t)))-0.7*w/1.94384-4 +t
+        return at
+    
     def __draw_temp_dew_humidity(self, data: avwx.structs.MetarData):
         """
         Draw the dynamic temperature, dewpoint, and humidity elements
@@ -666,12 +673,12 @@ class METARScreen:
         dew = data.dewpoint
         if self.is_large:
             temp_text = "Temp "
-            diff_text = "Std Dev "
+            diff_text = "App Temp "
             dew_text = "Dewpoint "
             hmd_text = "Humidity "
         else:
             temp_text = "TMP: "
-            diff_text = "STD: "
+            diff_text = "APP: "
             dew_text = "DEW: "
             hmd_text = "HMD: "
         # Dewpoint
@@ -683,7 +690,12 @@ class METARScreen:
             temp_text += f"{temp.value}{SpChar.DEGREES}"
             if self.is_large:
                 temp_text += self.metar.units.temperature
-            temp_diff = temp.value - 15
+            relHum = (
+                (6.11 * 10.0 ** (7.5 * dew.value / (237.7 + dew.value)))
+                / (6.11 * 10.0 ** (7.5 * temp.value / (237.7 + temp.value)))
+                * 100
+            )
+            temp_diff = __feeltemp(temp.value,relHum,data,wind_speed.value)
             diff_sign = "-" if temp_diff < 0 else "+"
             diff_text += f"{diff_sign}{abs(temp_diff)}{SpChar.DEGREES}"
         else:
