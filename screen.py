@@ -696,7 +696,7 @@ class METARScreen:
                 / (6.11 * 10.0 ** (7.5 * temp.value / (237.7 + temp.value)))
                 * 100
             )
-            temp_diff = speed.value
+            temp_diff = int(relHum)
             diff_sign = "-" if temp_diff < 0 else "+"
             diff_text += f"{diff_sign}{abs(temp_diff)}{SpChar.DEGREES}"
         else:
