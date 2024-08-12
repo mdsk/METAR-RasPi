@@ -663,7 +663,7 @@ class METARScreen:
         #w= w/1.94384
         e = (rh/100)*6.105*math.pow(2.71828, ((17.27*t)/(237.7+t)))
         at = 0.33*(rh/100)*6.105*math.pow(2.71828, ((17.27*t)/(237.7+t)))-0.7*w/1.94384-4 +t
-        return at
+        return int(at)
     
     def __draw_temp_dew_humidity(self, data: avwx.structs.MetarData):
         """
@@ -696,7 +696,7 @@ class METARScreen:
                 / (6.11 * 10.0 ** (7.5 * temp.value / (237.7 + temp.value)))
                 * 100
             )
-            temp_diff = int(relHum)
+            temp_diff = __feeltemp(temp.value,int(relHum),speed.value)
             diff_sign = "-" if temp_diff < 0 else "+"
             diff_text += f"{diff_sign}{abs(temp_diff)}{SpChar.DEGREES}"
         else:
