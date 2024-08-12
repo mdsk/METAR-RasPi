@@ -697,7 +697,8 @@ class METARScreen:
                 / (6.11 * 10.0 ** (7.5 * temp.value / (237.7 + temp.value)))
                 * 100
             )
-            temp_diff = __feeltemp(temp.value,int(relHum),speed.value)
+            e = (relHum/100)*6.105*math.pow(2.71828, ((17.27*temp.value)/(237.7+temp.value)))
+            temp_diff = e
             diff_sign = "-" if temp_diff < 0 else "+"
             diff_text += f"{diff_sign}{abs(temp_diff)}{SpChar.DEGREES}"
         else:
