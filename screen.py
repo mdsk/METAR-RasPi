@@ -698,8 +698,9 @@ class METARScreen:
                 * 100
             )
             e = (relHum/100)*6.105*math.pow(2.71828, ((17.27*temp.value)/(237.7+temp.value)))
-            temp_diff = e
-            diff_sign = "-" if temp_diff < 0 else "+"
+            at = 0.33*(relHum/100)*6.105*math.pow(2.71828, ((17.27*temp.value)/(237.7+temp.value)))-0.7*speed.value/1.94384-4+temp.value
+            temp_diff = int(at)
+            diff_sign = "-" if temp_diff < 0 else ""
             diff_text += f"{diff_sign}{abs(temp_diff)}{SpChar.DEGREES}"
         else:
             temp_text += "--"
