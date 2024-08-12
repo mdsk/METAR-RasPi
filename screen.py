@@ -661,8 +661,9 @@ class METARScreen:
     def __feeltemp(t, rh, w):
         #w = w/3.6
         #w= w/1.94384
-        e = (rh/100)*6.105*math.pow(2.71828, ((17.27*t)/(237.7+t)))
-        at = 0.33*(rh/100)*6.105*math.pow(2.71828, ((17.27*t)/(237.7+t)))-0.7*w/1.94384-4 +t
+        #e = (rh/100)*6.105*math.pow(2.71828, ((17.27*t)/(237.7+t)))
+        #at = 0.33*(rh/100)*6.105*math.pow(2.71828, ((17.27*t)/(237.7+t)))-0.7*w/1.94384-4 +t
+        at = (rh/100)*6.105
         return int(at)
     
     def __draw_temp_dew_humidity(self, data: avwx.structs.MetarData):
