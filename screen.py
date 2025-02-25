@@ -726,6 +726,7 @@ class METARScreen:
             hmd_text += "--"
         point = self.layout["main"]["humid"]
         self.win.blit(FONT_S3.render(hmd_text, 1, self.c.BLACK), point)
+        city = LocationInfo("Wroclaw", "Poland", "Europe/Warsaw", 51.12, 16.95)
         phase = int(round(moon.phase(datetime.now())))
         s = sun(city.observer, date=datetime.now(), tzinfo=city.timezone)
         sun_text = "RISE: "+str(s["sunrise"].hour)+":"+str(s["sunrise"].minute)+", SET: "+str(s["sunset"].hour)+":"+str(s["sunset"].minute)+", MOON: "+str(phase)
