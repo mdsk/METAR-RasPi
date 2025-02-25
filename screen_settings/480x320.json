@@ -41,7 +41,8 @@
         "cloud-graph": [[285, 50], [470, 310]],
         "wxrmk": [15, 215, 110, 30],
         "util-spacing": 87,
-        "util-back": [250, 480]
+        "util-back": [250, 480],
+        "sun_moon": [25,310]
     },
     "wxrmk": {
         "padding": 10,
