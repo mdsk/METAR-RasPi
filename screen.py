@@ -19,6 +19,10 @@ from typing import Callable, List, Tuple
 import avwx
 import pygame
 from dateutil.tz import tzlocal
+from astral import LocationInfo
+import datetime
+from astral.sun import sun
+from astral import moon
 
 # module
 import common
@@ -723,6 +727,11 @@ class METARScreen:
             hmd_text += "--"
         point = self.layout["main"]["humid"]
         self.win.blit(FONT_S3.render(hmd_text, 1, self.c.BLACK), point)
+        phase = int(round(moon.phase(datetime.datetime.now())))
+        s = sun(city.observer, date=datetime.datetime.now(), tzinfo=city.timezone)
+        sun_text = "RISE: "+str(s["sunrise"].hour)+":"+str(s["sunrise"].minute)+", SET: "+str(s["sunset"].hour)+":"+str(s["sunset"].minute)+", MOON: "+str(phase)
+        point = self.layout["main"]["sun_moon"]
+        self.win.blit(FONT_S3.render(sun_text, 1, self.c.BLACK), point)
 
     def __draw_cloud_graph(
         self, clouds: List[avwx.structs.Cloud], tl: List[int], br: List[int]
