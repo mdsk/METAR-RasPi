@@ -729,7 +729,9 @@ class METARScreen:
         city = LocationInfo("Wroclaw", "Poland", "Europe/Warsaw", 51.12, 16.95)
         phase = int(round(moon.phase(datetime.now())))
         s = sun(city.observer, date=datetime.now(), tzinfo=city.timezone)
-        sun_text = "RISE: "+str(s["sunrise"].hour)+":"+str(s["sunrise"].minute)+", SET: "+str(s["sunset"].hour)+":"+str(s["sunset"].minute)+", MOON: "+str(phase)
+        sun_text = (f"RISE: {s['sunrise'].hour:02}:{s['sunrise'].minute:02}, "
+            f"SET: {s['sunset'].hour:02}:{s['sunset'].minute:02}, "
+            f"MOON: {phase_value}")
         point = self.layout["main"]["sun_moon"]
         self.win.blit(FONT_S3.render(sun_text, 1, self.c.BLACK), point)
 
