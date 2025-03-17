@@ -731,7 +731,7 @@ class METARScreen:
         s = sun(city.observer, date=datetime.now(), tzinfo=city.timezone)
         sun_text = (f"RISE: {s['sunrise'].hour:02}:{s['sunrise'].minute:02}, "
             f"SET: {s['sunset'].hour:02}:{s['sunset'].minute:02}, "
-            f"MOON: {phase_value}")
+            f"MOON: {phase}")
         point = self.layout["main"]["sun_moon"]
         self.win.blit(FONT_S3.render(sun_text, 1, self.c.BLACK), point)
 
