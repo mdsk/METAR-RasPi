@@ -1189,51 +1189,66 @@ async def clock_loop(screen: METARScreen):
         await aio.sleep(1)
 
 
-def run_with_touch_input(screen: METARScreen, *coros):
+def run_with_touch_input(screen: 'METARScreen', *coros):
     """
-    Runs async screen functions with touch input enabled (non-blocking for SPI LCDs).
-    Compatible with Python 3.11+.
+    Runs async screen functions with touch input enabled.
+    Fully compatible with SPI LCD3.2 on Raspberry Pi.
+    Non-blocking input loop and safe display updates.
     """
+    import os
     import asyncio as aio
     import pygame
 
+    # Force framebuffer driver for SPI LCD
+    os.putenv('SDL_VIDEODRIVER', 'fbcon')
+    os.putenv('SDL_FBDEV', '/dev/fb1')  # adjust if your LCD uses /dev/fb0
+    pygame.init()
+    pygame.mouse.set_visible(False)  # hide cursor
+
     async def non_blocking_input_loop(screen):
-        """Polls pygame events without blocking."""
+        """Poll pygame events without blocking."""
         while True:
             try:
-                # Get all pending events without blocking
                 for event in pygame.event.get():
-                    # handle events if needed, e.g., quit
+                    # handle quit event if needed
                     if event.type == pygame.QUIT:
                         return
             except pygame.error:
-                # Ignore errors on SPI LCDs
+                # ignore errors on SPI LCD
                 pass
-            await aio.sleep(0.05)  # yield control to event loop
+            await aio.sleep(0.05)  # yield to event loop
+
+    async def safe_coroutine(coro):
+        """
+        Wrap coroutine to catch pygame errors and yield control frequently.
+        This prevents hanging on SPI LCD during display updates.
+        """
+        try:
+            if aio.iscoroutine(coro):
+                await coro
+            else:
+                # call if regular function
+                await coro()
+        except pygame.error:
+            pass
+        except Exception as e:
+            print(f"Coroutine error: {e}")
 
     async def runner():
-        # Convert all provided coroutines into tasks
-        tasks = []
-        for c in coros:
-            if aio.iscoroutine(c):
-                tasks.append(aio.create_task(c))
-            else:
-                tasks.append(aio.create_task(c()))
+        # Wrap all coroutines in safe_coroutine
+        tasks = [aio.create_task(safe_coroutine(c)) for c in coros]
 
-        # Add the non-blocking input loop task
+        # Add the non-blocking input loop
         tasks.append(aio.create_task(non_blocking_input_loop(screen)))
 
-        # Wait for any task to finish
-        done, pending = await aio.wait(
-            tasks,
-            return_when=aio.FIRST_COMPLETED
-        )
+        # Wait until any task completes
+        done, pending = await aio.wait(tasks, return_when=aio.FIRST_COMPLETED)
 
-        # Cancel all remaining tasks
+        # Cancel remaining tasks
         for p in pending:
             p.cancel()
 
-    # Run the asyncio event loop
+    # Run the async loop
     aio.run(runner())
 
 
