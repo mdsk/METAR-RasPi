@@ -1192,8 +1192,7 @@ async def clock_loop(screen: METARScreen):
 def run_with_touch_input(screen: 'METARScreen', *coros):
     """
     Runs async screen functions with touch input enabled.
-    Fully compatible with SPI LCD3.2 on Raspberry Pi.
-    Non-blocking input loop and safe display updates.
+    Compatible with SPI LCD3.2. Runs indefinitely until interrupted.
     """
     import os
     import asyncio as aio
@@ -1201,33 +1200,25 @@ def run_with_touch_input(screen: 'METARScreen', *coros):
 
     # Force framebuffer driver for SPI LCD
     os.putenv('SDL_VIDEODRIVER', 'fbcon')
-    os.putenv('SDL_FBDEV', '/dev/fb1')  # adjust if your LCD uses /dev/fb0
+    os.putenv('SDL_FBDEV', '/dev/fb1')
     pygame.init()
-    pygame.mouse.set_visible(False)  # hide cursor
+    pygame.mouse.set_visible(False)
 
     async def non_blocking_input_loop(screen):
-        """Poll pygame events without blocking."""
         while True:
             try:
                 for event in pygame.event.get():
-                    # handle quit event if needed
                     if event.type == pygame.QUIT:
                         return
             except pygame.error:
-                # ignore errors on SPI LCD
                 pass
-            await aio.sleep(0.05)  # yield to event loop
+            await aio.sleep(0.05)
 
     async def safe_coroutine(coro):
-        """
-        Wrap coroutine to catch pygame errors and yield control frequently.
-        This prevents hanging on SPI LCD during display updates.
-        """
         try:
             if aio.iscoroutine(coro):
                 await coro
             else:
-                # call if regular function
                 await coro()
         except pygame.error:
             pass
@@ -1235,18 +1226,17 @@ def run_with_touch_input(screen: 'METARScreen', *coros):
             print(f"Coroutine error: {e}")
 
     async def runner():
-        # Wrap all coroutines in safe_coroutine
+        # Create all tasks
         tasks = [aio.create_task(safe_coroutine(c)) for c in coros]
-
-        # Add the non-blocking input loop
         tasks.append(aio.create_task(non_blocking_input_loop(screen)))
 
-        # Wait until any task completes
-        done, pending = await aio.wait(tasks, return_when=aio.FIRST_COMPLETED)
-
-        # Cancel remaining tasks
-        for p in pending:
-            p.cancel()
+        # Wait for all tasks indefinitely
+        try:
+            await aio.gather(*tasks)
+        except aio.CancelledError:
+            # Gracefully handle cancellation
+            for t in tasks:
+                t.cancel()
 
     # Run the async loop
     aio.run(runner())
