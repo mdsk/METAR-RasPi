@@ -1191,21 +1191,37 @@ async def clock_loop(screen: METARScreen):
 
 def run_with_touch_input(screen: METARScreen, *coros):
     """
-    Runs async screen functions with touch input enabled.
+    Runs async screen functions with touch input enabled (non-blocking for SPI LCDs).
     Compatible with Python 3.11+.
     """
+    import asyncio as aio
+    import pygame
+
+    async def non_blocking_input_loop(screen):
+        """Polls pygame events without blocking."""
+        while True:
+            try:
+                # Get all pending events without blocking
+                for event in pygame.event.get():
+                    # handle events if needed, e.g., quit
+                    if event.type == pygame.QUIT:
+                        return
+            except pygame.error:
+                # Ignore errors on SPI LCDs
+                pass
+            await aio.sleep(0.05)  # yield control to event loop
+
     async def runner():
         # Convert all provided coroutines into tasks
         tasks = []
-
         for c in coros:
             if aio.iscoroutine(c):
                 tasks.append(aio.create_task(c))
             else:
                 tasks.append(aio.create_task(c()))
 
-        # Add input loop task
-        tasks.append(aio.create_task(input_loop(screen)))
+        # Add the non-blocking input loop task
+        tasks.append(aio.create_task(non_blocking_input_loop(screen)))
 
         # Wait for any task to finish
         done, pending = await aio.wait(
@@ -1217,6 +1233,7 @@ def run_with_touch_input(screen: METARScreen, *coros):
         for p in pending:
             p.cancel()
 
+    # Run the asyncio event loop
     aio.run(runner())
 
 
