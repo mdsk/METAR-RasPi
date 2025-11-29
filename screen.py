@@ -1188,12 +1188,35 @@ async def clock_loop(screen: METARScreen):
         await aio.sleep(1)
 
 
-def run_with_touch_input(screen: METARScreen, *coros: List[Callable]):
+def run_with_touch_input(screen: METARScreen, *coros):
     """
-    Runs an async screen function with touch input enabled
+    Runs async screen functions with touch input enabled.
+    Compatible with Python 3.11+.
     """
-    coros = [*coros, input_loop(screen)]
-    aio.run(aio.wait(coros, return_when=aio.FIRST_COMPLETED))
+    async def runner():
+        # Convert all provided coroutines into tasks
+        tasks = []
+
+        for c in coros:
+            if aio.iscoroutine(c):
+                tasks.append(aio.create_task(c))
+            else:
+                tasks.append(aio.create_task(c()))
+
+        # Add input loop task
+        tasks.append(aio.create_task(input_loop(screen)))
+
+        # Wait for any task to finish
+        done, pending = await aio.wait(
+            tasks,
+            return_when=aio.FIRST_COMPLETED
+        )
+
+        # Cancel all remaining tasks
+        for p in pending:
+            p.cancel()
+
+    aio.run(runner())
 
 
 def main():
