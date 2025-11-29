@@ -115,6 +115,7 @@ def hide_mouse():
     """
     This makes the mouse transparent
     """
+    return
     pygame.mouse.set_cursor(
         (8, 8), (0, 0), (0, 0, 0, 0, 0, 0, 0, 0), (0, 0, 0, 0, 0, 0, 0, 0)
     )
