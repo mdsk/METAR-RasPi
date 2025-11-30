@@ -61,6 +61,7 @@ class Color:
     BLUE = 0, 0, 255
     PURPLE = 150, 0, 255
     GRAY = 60, 60, 60
+    LIGHT_GRAY = 120, 120, 120
 
     def __getitem__(self, key: str) -> Tuple[int, int, int]:
         try:
@@ -734,7 +735,7 @@ class METARScreen:
             f"SET: {s['sunset'].hour:02}:{s['sunset'].minute:02}, "
             f"MOON: {phase}")
         point = self.layout["main"]["sun_moon"]
-        self.win.blit(FONT_S3.render(sun_text, 1, self.c.GREEN), point)
+        self.win.blit(FONT_S2.render(sun_text, 1, self.c.LIGHT_GRAY), point)
 
     def __draw_cloud_graph(
         self, clouds: List[avwx.structs.Cloud], tl: List[int], br: List[int]
