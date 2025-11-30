@@ -37,7 +37,7 @@ include_remarks = False
 # ------- Screen Settings ------ #
 
 # Size of the screen. Loads the layout from "./screen_settings"
-layout = "480x320"
+layout = "320x240"
 
 LOC = Path(path.abspath(path.dirname(__file__)))
 layout = LOC / "screen_settings" / f"{layout}.json"

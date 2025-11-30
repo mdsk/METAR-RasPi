@@ -10,7 +10,7 @@
         "l1": 48
     },
     "button": {
-        "radius": 25,
+        "radius": 20,
         "outline": 2
     },
     "fr-display": {
@@ -20,25 +20,29 @@
         "LIFR": ["purple", -5],
         "N/A": ["black", -6]
     },
-    "util": [40, 213],
+    "util": [45, 198],
     "main": {
-        "title": [5, 5],
+        "clock": [5, 1],
+	"clock-label":  [150,30],
+	"timestamp":  [80,55],
+	"station": [500,500],
         "flight-rules": [263, 5],
-        "wind-compass": [40, 80],
-        "wind-compass-radius": 35,
-        "wind-speed": [40, 126],
-        "wind-gust": [40, 147],
+        "wind-compass": [45, 75],
+        "wind-compass-radius": 25,
+        "wind-speed": [40, 111],
+        "wind-gust": [40, 132],
         "temp-icon": [60, 50],
-        "temp": [110, 50],
-        "temp-stdv": [110, 82],
-        "dew": [105, 114],
-        "humid": [90, 146],
-        "altim": [90, 178],
-        "vis": [90, 210],
-        "cloud-graph": [[200, 35], [310, 230]],
-        "wxrmk": [3, 159, 80, 27],
+        "temp": [110, 90],
+        "temp-stdv": [110, 110],
+        "dew": [105, 130],
+        "humid": [90, 150],
+        "altim": [90, 170],
+        "vis": [90, 190],
+        "cloud-graph": [[200, 35], [310, 215]],
+        "wxrmk": [3, 144, 80, 27],
         "util-spacing": 60,
-        "util-back": [187, 320]
+        "util-back": [187, 320],
+	"sun_moon": [5,220]
     },
     "wxrmk": {
         "padding": 5,

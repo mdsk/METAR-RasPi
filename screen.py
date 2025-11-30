@@ -1228,7 +1228,7 @@ def run_with_touch_input(screen: 'METARScreen', *coros):
     async def runner():
         # Create all tasks
         tasks = [aio.create_task(safe_coroutine(c)) for c in coros]
-        tasks.append(aio.create_task(non_blocking_input_loop(screen)))
+        # tasks.append(aio.create_task(non_blocking_input_loop(screen)))
 
         # Wait for all tasks indefinitely
         try:
@@ -1240,6 +1240,10 @@ def run_with_touch_input(screen: 'METARScreen', *coros):
 
     # Run the async loop
     aio.run(runner())
+
+def run_with_touch_input_old(screen: METARScreen, *coros: List[Callable]):
+   coros = [*coros, input_loop(screen)]
+   aio.run(aio.wait(coros, return_when=aio.FIRST_COMPLETED))
 
 
 def main():
