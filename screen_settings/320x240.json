@@ -42,7 +42,7 @@
         "wxrmk": [3, 144, 80, 27],
         "util-spacing": 60,
         "util-back": [187, 320],
-	    "sun_moon": [5,220]
+	    "sun_moon": [25,220]
     },
     "wxrmk": {
         "padding": 5,
