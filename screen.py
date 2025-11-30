@@ -824,18 +824,18 @@ class METARScreen:
         if "title" in cfg.layout["main"]:
             time_text = data.station + "  " + tstamp
             point = self.layout["main"]["title"]
-            self.win.blit(FONT_M1.render(time_text, 1, self.c.BLACK), point)
+            self.win.blit(FONT_M1.render(time_text, 1, self.c.LIGHT_GRAY), point)
         else:
             self.__draw_clock()
             point = self.layout["main"]["station"]
-            self.win.blit(FONT_M1.render(data.station, 1, self.c.BLACK), point)
+            self.win.blit(FONT_M1.render(data.station, 1, self.c.LIGHT_GRAY), point)
             if self.is_large:
                 point = self.layout["main"]["timestamp-label"]
-                self.win.blit(FONT_S3.render(f"Updated", 1, self.c.BLACK), point)
+                self.win.blit(FONT_S3.render(f"Updated", 1, self.c.LIGHT_GRAY), point)
             else:
                 tstamp = "TS: " + tstamp
             point = self.layout["main"]["timestamp"]
-            self.win.blit(FONT_S3.render(tstamp, 1, self.c.BLACK), point)
+            self.win.blit(FONT_S3.render(tstamp, 1, self.c.LIGHT_GRAY), point)
         # Current Flight Rules
         fr = data.flight_rules or "N/A"
         fr_color, fr_x_offset = self.layout["fr-display"][fr]
