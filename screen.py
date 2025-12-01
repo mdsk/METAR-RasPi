@@ -1195,25 +1195,12 @@ def run_with_touch_input(screen: METARScreen, *coros):
     Runs async screen functions with touch input enabled.
     Compatible with SPI LCD3.2. Runs indefinitely until interrupted.
     """
-    import os
-    import asyncio as aio
-    import pygame
 
     # Force framebuffer driver for SPI LCD
     #os.putenv('SDL_VIDEODRIVER', 'fbcon')
     #os.putenv('SDL_FBDEV', '/dev/fb1')
     pygame.init()
     pygame.mouse.set_visible(False)
-
-    async def non_blocking_input_loop(screen):
-        while True:
-            try:
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        return
-            except pygame.error:
-                pass
-            await aio.sleep(0.05)
 
     async def safe_coroutine(coro):
         try:
@@ -1230,7 +1217,7 @@ def run_with_touch_input(screen: METARScreen, *coros):
         # Create all tasks
         #coros.append(input_loop(screen))
         tasks = [aio.create_task(safe_coroutine(c)) for c in coros]
-        tasks.append(aio.create_task(input_loop(screen)))
+        #tasks.append(aio.create_task(input_loop(screen)))
 
         # Wait for all tasks indefinitely
         try:
@@ -1260,7 +1247,6 @@ def main():
     coros = [update_loop(screen)]
     if "clock" in screen.layout["main"]:
         coros.append(clock_loop(screen))
-    #coros.append(input_loop(screen))
     run_with_touch_input(screen, *coros)
 
 
